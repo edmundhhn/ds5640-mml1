@@ -117,7 +117,15 @@ for(b in 1:3) {
 }
 ```
 
-Using lm with square terms. When including square terms the variance increases and bias decreases, The model is thus more likely to be overfitting
+Using lm with square terms. 
+
+Bias is a term that reflects the difference between the avaerage prediction of the model and true data. It describes tendancy towards assumptions inherent in the algorithm which may cause it to miss relevant relationships. 
+
+Variance is a term which reflects how closely a model fits the nuances of a dataset. It describes the tendancy towards small fluctuations in data which may cause it to overfit into noise
+
+The bias and variance have a tradeoff relationship. The data scientist should find an optimal model which does not have so much bias it underfits (is not able to fit the training set) and not so much variance that it overfits the training set and thus performs poorly on the test set
+
+When including square terms the variance increases and bias decreases, The model can now fit the nuances in the data, but at the same time this puts it at risk over overfitting, and may be unable to fit a test set well if provided. 
 
 ```{r}
 ## fit linear classifier

@@ -135,7 +135,7 @@ for(b in 1:3) {
     ## 
     ## Coefficients:
     ## (Intercept)           x1           x2  
-    ##    0.284232     0.002014     0.277341
+    ##    0.341892     0.008998     0.270403
 
     ## 
     ## Call:
@@ -143,7 +143,7 @@ for(b in 1:3) {
     ## 
     ## Coefficients:
     ## (Intercept)           x1           x2  
-    ##     0.28689      0.02617      0.28134
+    ##     0.24349      0.02427      0.28235
 
     ## 
     ## Call:
@@ -151,13 +151,31 @@ for(b in 1:3) {
     ## 
     ## Coefficients:
     ## (Intercept)           x1           x2  
-    ##     0.35367     -0.05417      0.20720
+    ##    0.277525    -0.002012     0.253828
 
 ![](hw1_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
 
-Using lm with square terms. When including square terms the variance
-increases and bias decreases, The model is thus more likely to be
-overfitting
+Using lm with square terms.
+
+Bias is a term that reflects the difference between the avaerage
+prediction of the model and true data. It describes tendancy towards
+assumptions inherent in the algorithm which may cause it to miss
+relevant relationships.
+
+Variance is a term which reflects how closely a model fits the nuances
+of a dataset. It describes the tendancy towards small fluctuations in
+data which may cause it to overfit into noise
+
+The bias and variance have a tradeoff relationship. The data scientist
+should find an optimal model which does not have so much bias it
+underfits (is not able to fit the training set) and not so much variance
+that it overfits the training set and thus performs poorly on the test
+set
+
+When including square terms the variance increases and bias decreases,
+The model can now fit the nuances in the data, but at the same time this
+puts it at risk over overfitting, and may be unable to fit a test set
+well if provided.
 
 ``` r
 ## fit linear classifier
@@ -263,7 +281,7 @@ for(b in 1:3) {
     ## 
     ## Coefficients:
     ## (Intercept)      I(x1^2)      I(x2^2)   I(x1 * x2)           x1           x2  
-    ##   0.2854408   -0.0006663   -0.0937030   -0.0838526    0.0333306    0.4152098
+    ##     0.28599     -0.02367     -0.07998     -0.11494      0.07586      0.43994
 
     ## 
     ## Call:
@@ -271,7 +289,7 @@ for(b in 1:3) {
     ## 
     ## Coefficients:
     ## (Intercept)      I(x1^2)      I(x2^2)   I(x1 * x2)           x1           x2  
-    ##    0.280563     0.002728    -0.075230    -0.061567     0.064967     0.408778
+    ##    0.282840     0.017282    -0.020237    -0.003266    -0.027961     0.295836
 
     ## 
     ## Call:
@@ -279,7 +297,7 @@ for(b in 1:3) {
     ## 
     ## Coefficients:
     ## (Intercept)      I(x1^2)      I(x2^2)   I(x1 * x2)           x1           x2  
-    ##     0.29849     -0.03241     -0.11184     -0.13989      0.14159      0.48752
+    ##     0.23460     -0.03203     -0.12194     -0.15811      0.19090      0.54271
 
 ![](hw1_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
 

@@ -1,0 +1,79 @@
+---
+title: "Homework 3"
+author: "Edmund Hui"
+date: "2023-02-09"
+output: github_document
+---
+
+```{r}
+library('splines')        ## for 'bs'
+library('dplyr')          ## for 'select', 'filter', and others
+library('magrittr')       ## for '%<>%' operator
+library('glmnet')         ## for 'glmnet'
+```
+
+```{r}
+#1 
+prostate <- 
+  read.table(url(
+    'https://web.stanford.edu/~hastie/ElemStatLearn/datasets/prostate.data'))
+```
+
+```{r}
+#2
+prostate_train = prostate %>% filter(train==TRUE)
+prostate_test = prostate %>% filter(train==FALSE)
+cor(prostate_train[, 1:(dim(prostate)[2]-1)])
+```
+
+
+```{r}
+#3 #4
+prostate_train <- prostate_train %>% select(-c(train))
+fit = lm(lcavol ~ ., data=prostate_train)
+```
+
+```{r}
+#5
+mean((prostate_test$lcavol - predict(fit, newdata=prostate_test %>% select(-c(train, lcavol))))^2)
+```
+
+
+```{r}
+X_train <- prostate_train[, 1:(dim(prostate)[2]-1)] %>% select(-c(lcavol))
+y_train <- prostate_train$lcavol
+X_test <- prostate_test[, 1:(dim(prostate)[2]-1)] %>% select(-c(lcavol))
+y_test <- prostate_test$lcavol
+```
+
+```{r}
+#6
+lambdas <- 10^seq(2, -3, by = -.1)
+fit_ridge <- glmnet(X_train, y_train , alpha=0, lambdas=lambdas)
+
+cv_fit_ridge <- cv.glmnet(data.matrix(X_train), y_train, alpha=0, lambda=lambdas)
+
+# Optimal lambda
+cv_fit_ridge$lambda.min
+```
+
+```{r}
+preds_train <- predict(fit_ridge, s=lambdas, newx=data.matrix(X_train))
+train_losses <- colMeans((preds_train - y_train) ^ 2)
+```
+
+```{r}
+y_pred <- predict(fit_ridge, s=lambdas, newx=data.matrix(X_test))
+test_losses <- colMeans((y_pred - y_test) ^ 2)
+```
+
+```{r}
+plot(log(lambdas), test_losses, ylim=c(0.4, 1.6), ylab="Mean Square Error Loss")
+points(log(lambdas), train_losses, col="red")
+legend(-7, 1.5, legend=c("test loss", "training loss"), fill=c("black", "red"))
+```
+
+
+```{r}
+plot(fit_ridge, xvar="lambda", label=TRUE) 
+```

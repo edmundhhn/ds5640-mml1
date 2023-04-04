@@ -1,0 +1,68 @@
+---
+title: "Homework 5"
+author: "Edmund Hui"
+date: "2023-04-04"
+output: html_document
+---
+
+```{r}
+#install.packages("randomForest")
+#install.packages("caret")
+library(randomForest)
+library(caret)
+```
+
+
+
+```{r}
+train_url <- "https://hastie.su.domains/ElemStatLearn/datasets/vowel.train"
+test_url <- "https://hastie.su.domains/ElemStatLearn/datasets/vowel.test"
+
+train <- read.csv(train_url, row.names = 1)
+train$y <- as.factor(train$y)
+train
+
+test <- read.csv(test_url, row.names = 1)
+test$y <- as.factor(test$y)
+test
+```
+
+# 1
+
+```{r}
+rf <- randomForest(y ~ ., data=train)
+```
+
+# 2
+
+```{r}
+tc <- trainControl(method="cv", number=5)
+
+# vary mtry between 1 and 10
+rf_grid <- gbmGrid <-  expand.grid(mtry=c(1:10))
+rf_cv <- train(y ~ ., data=train, method="rf", trControl=tc, tuneGrid = rf_grid)
+rf_cv
+```
+
+# 3
+
+```{r}
+rf <- randomForest(y ~ ., data=train, mtry=2)
+```
+
+```{r}
+test_inputs <- test[, c(2:length(names(test)))]
+test_targets <- test[, c(1)]
+```
+
+```{r}
+pred <- predict(rf, newdata=test_inputs, type="response")
+```
+
+```{r}
+xtab = table(pred, test_targets)
+confusionMatrix(xtab)
+```
+
+
+
